@@ -7,7 +7,7 @@ import Services from './components/Services'
 import Work from './components/Work'
 import Certifications from './components/Certifications'
 import ProfileLinks from './components/ProfileLinks'
-import SoftSkills from './components/Softskills'
+import SoftSkills from './components/SoftSkills'
 import Contact from './components/Contact'
 const App = () => {
   return (
