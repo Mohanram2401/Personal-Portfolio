@@ -49,7 +49,7 @@ const Navbar = () => {
         },
     };
   return (
-    <div>
+    <div className="fixed top-0 left-0 w-full z-50 bg-black">
         <motion.div 
         initial={{opacity:0, y:-100}}
         animate={{opacity:1, y:0}}
@@ -75,9 +75,13 @@ const Navbar = () => {
                     ))}
                 </ul>
             </div>
-            <a className='md:text-base lg:text-lg bg-purple-500 hover:bg-purple-400 text-white px-4 py-2 rounded-full hover:cursor-pointer'>
-                Download CV{" "}
-            </a>
+            <a
+  href={require('../assets/mohan-cv.pdf')} // Make sure to adjust the path correctly based on where your resume is located
+  download="Mohanram_Murugesan_Resume.pdf" // This will set the default download file name
+  className='md:text-base lg:text-lg bg-purple-500 hover:bg-purple-400 text-white px-4 py-2 rounded-full hover:cursor-pointer'
+>
+  Download CV
+</a>
         </motion.div>
 
         <div className='flex md:hidden justify-between'>
