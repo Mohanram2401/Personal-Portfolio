@@ -5,54 +5,54 @@ import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaFacebook, FaTwitter, FaLinkedin,
 import emailjs from 'emailjs-com';
 
 const Contact = () => {
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.2,
-  });
-
   const form = useRef();
 
   const sendEmail = (e) => {
     e.preventDefault();
-
     emailjs.sendForm('service_h13a7a5', 'template_tncrypp', form.current, 'nfJeg8UUJ_7RXU06G')
-      .then((result) => {
+      .then(() => {
         alert('Message sent successfully!');
-        console.log(result.text);
-      }, (error) => {
-        alert('Failed to send the message, please try again.');
-        console.log(error.text);
-      });
-    e.target.reset();
+        e.target.reset();
+      })
+      .catch(() => alert('Failed to send the message, please try again.'));
   };
+
+  // Variants for animation
+  const fadeInVariant = (direction) => ({
+    hidden: { opacity: 0, x: direction === 'left' ? -50 : 50 },
+    visible: { opacity: 1, x: 0 },
+  });
+
+  const [contactInfoRef, contactInfoInView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [formRef, formInView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [footerRef, footerInView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   return (
     <div id='contact'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-12'>
         <motion.h2
-          ref={ref}
           initial={{ opacity: 0, y: -100 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.3, duration: 0.5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: 'easeInOut' }}
           className='text-white font-bold text-4xl'>
           Let's Discuss Your <span className='text-purple-500'>Project</span>
         </motion.h2>
         <motion.p
-          ref={ref}
           initial={{ opacity: 0, y: -100 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.3, duration: 0.5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: 'easeInOut', delay: 0.2 }}
           className='text-slate-400 mt-4'>
           Let's make something new, different, and more meaningful or make things more visual or conceptual.
         </motion.p>
       </div>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 grid grid-cols-1 md:grid-cols-2 gap-8'>
-        <div className='space-y-6'>
+        <div className='space-y-6' ref={contactInfoRef}>
+          {/* Contact Information */}
           <motion.div
-            ref={ref}
-            initial={{ opacity: 0, x: -50 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.2, duration: 0.5 }}
+            initial="hidden"
+            animate={contactInfoInView ? "visible" : "hidden"}
+            variants={fadeInVariant('left')}
+            transition={{ duration: 0.3, delay: 0.2 }}
             className='flex items-center space-x-4'>
             <div className='bg-purple-500 p-4 rounded-full'>
               <FaPhone className='text-white w-6 h-6' />
@@ -64,10 +64,10 @@ const Contact = () => {
           </motion.div>
 
           <motion.div
-            ref={ref}
-            initial={{ opacity: 0, x: -50 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.4, duration: 0.5 }}
+            initial="hidden"
+            animate={contactInfoInView ? "visible" : "hidden"}
+            variants={fadeInVariant('left')}
+            transition={{ duration: 0.3, delay: 0.4 }}
             className='flex items-center space-x-4'>
             <div className='bg-purple-500 p-4 rounded-full'>
               <FaEnvelope className='text-white w-6 h-6' />
@@ -79,10 +79,10 @@ const Contact = () => {
           </motion.div>
 
           <motion.div
-            ref={ref}
-            initial={{ opacity: 0, x: -50 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.2, duration: 0.5 }}
+            initial="hidden"
+            animate={contactInfoInView ? "visible" : "hidden"}
+            variants={fadeInVariant('left')}
+            transition={{ duration: 0.3, delay: 0.6 }}
             className='flex items-center space-x-4'>
             <div className='bg-purple-500 p-4 rounded-full'>
               <FaMapMarkerAlt className='text-white w-6 h-6' />
@@ -93,13 +93,16 @@ const Contact = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* Contact Form */}
         <motion.form
-          ref={form}
-          onSubmit={sendEmail}
-          initial={{ opacity: 0, x: 50 }}
-          animate={inView ? { opacity: 1, x: 0 } : {}}
-          transition={{ delay: 0.2, duration: 0.3 }}
-          className='space-y-4 text-white'>
+          ref={formRef}
+          initial="hidden"
+          animate={formInView ? "visible" : "hidden"}
+          variants={fadeInVariant('right')}
+          transition={{ duration: 0.3 }}
+          className='space-y-4 text-white'
+          onSubmit={sendEmail}>
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
             <input name="user_name" type="text" placeholder='Fullname' className='border border-purple-500 bg-gray-900 p-4 rounded-md w-full' required />
             <input name="user_email" type="email" placeholder='Your Email' className='border border-purple-500 bg-gray-900 p-4 rounded-md w-full' required />
@@ -113,16 +116,18 @@ const Contact = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             type='submit'
-            className='bg-purple-500 text-white px-6 py-3 rounded-md bg-purple-500 hover:bg-purple-600 transition duration-200'>
+            className='bg-purple-500 text-white px-6 py-3 rounded-md hover:bg-purple-600 transition duration-200'>
             Submit Message
           </motion.button>
         </motion.form>
       </div>
+
+      {/* Footer */}
       <motion.div
-        ref={ref}
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: 1 } : {}}
-        transition={{ delay: 0.5, duration: 0.2 }}
+        ref={footerRef}
+        initial="hidden"
+        animate={footerInView ? "visible" : "hidden"}
+        transition={{ delay: 0.3, duration: 0.5 }}
         className='mt-12 md:mt-48 flex flex-col md:flex-row justify-between items-center p-5 text-white border-t-2 border-purple-500'>
         <p>&copy; 2024. All Rights Reserved</p>
         <p>Mohanram ❤️</p>
